@@ -33,7 +33,7 @@ public class TestApp {
     StdDraw.show();
 
     // print and draw the line segments
-    FastCollinearPoints collinear = new FastCollinearPoints(points);
+    BruteCollinearPoints collinear = new BruteCollinearPoints(points);
     StdOut.println(String.format("Segments %d", collinear.numberOfSegments()));
     for (LineSegment segment : collinear.segments()) {
       StdOut.println(segment);

@@ -16,35 +16,35 @@ public class FastCollinearPoints {
       }
     }
     Point[] pts = new Point[points.length];
-    System.arraycopy( points, 0, pts, 0, points.length );
-    Arrays.sort( pts );
+    System.arraycopy(points, 0, pts, 0, points.length);
+    Arrays.sort(pts);
     for (int i = 0; i < pts.length; i++) {
       if (i > 0 && (pts[i].compareTo(pts[i-1]) == 0)) {
         throw new java.lang.IllegalArgumentException();
       }      
     }
     for (int i = 0; i < points.length; i++) {
-      Arrays.sort( pts, points[i].slopeOrder() );
+      Arrays.sort(pts, points[i].slopeOrder());
       double slLast = Double.NaN;
       ArrayList<Point> collinear = new ArrayList<Point>();
       for (int j = 1; j < points.length; j++) {
         if (points[j] == null) {
           throw new java.lang.IllegalArgumentException();
         }
-        double sl = points[i].slopeTo( pts[j] );
-        if ( !Double.isNaN(slLast) && Math.abs( sl - slLast ) > Double.MIN_NORMAL ) {
-          addSegment( collinear, points[i] );
+        double sl = points[i].slopeTo(pts[j]);
+        if (!Double.isNaN(slLast) && Math.abs(sl - slLast) > Double.MIN_NORMAL) {
+          addSegment(collinear, points[i]);
           collinear.clear();
         }
-        collinear.add( pts[j] );
+        collinear.add(pts[j]);
         slLast = sl;
       }
-      addSegment( collinear, points[i] );
+      addSegment(collinear, points[i]);
     }
     LineSegment2[] arr = new LineSegment2[segments2.size()];
     arr = segments2.toArray(arr);
     Arrays.sort(arr);
-    if (arr.length > 0 ) {
+    if (arr.length > 0) {
       segments.add(arr[0].getLineSegment());
     }
     for (int i = 1; i < arr.length; i++) {
@@ -55,7 +55,7 @@ public class FastCollinearPoints {
     segments2.clear();
   }
 
-  private void addSegment( ArrayList<Point> points, Point p0 ) {
+  private void addSegment(ArrayList<Point> points, Point p0) {
     if (points.size() < 3) {
       return;
     }
@@ -65,20 +65,6 @@ public class FastCollinearPoints {
     Arrays.sort(arr);
     LineSegment2 ls = new LineSegment2(arr[ 0 ], arr[ arr.length - 1 ]);
     segments2.add(ls);
-    /*
-    LineSegment ls = new LineSegment(arr[ 0 ], arr[ arr.length - 1 ]);
-
-    int n = 0;
-    for (LineSegment s : segments) {
-      if (s.toString().equals( ls.toString())) {
-        n++;
-        break;
-      }
-    }
-    if (n == 0) {
-      segments.add(ls);
-    }
-    */
   }
 
   // the number of line segments
@@ -107,7 +93,7 @@ public class FastCollinearPoints {
 
     public int compareTo(LineSegment2 that) {
       int cm = p0.compareTo(that.p0);
-      if (cm != 0 ) {
+      if (cm != 0) {
         return cm;
       }
       return p1.compareTo(that.p1);
