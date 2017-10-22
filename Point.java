@@ -130,8 +130,8 @@ public class Point implements Comparable<Point> {
         pt = p;
       }
       public int compare(Point p0, Point p1) {
-        double cp0 = pt.compareTo(p0);
-        double cp1 = pt.compareTo(p1);
+        double cp0 = pt.slopeTo(p0);
+        double cp1 = pt.slopeTo(p1);
         if( cp0 < cp1 ) {
           return -1;
         }
