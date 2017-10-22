@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BruteCollinearPoints {
 
@@ -6,14 +7,23 @@ public class BruteCollinearPoints {
 
   // finds all line segments containing 4 points
   public BruteCollinearPoints(Point[] points) {
-    if (points == null) {
+    if( points == null || points.length==0 ) {
       throw new java.lang.IllegalArgumentException();
     }
-
-    for (int i = 0; i < points.length; i++) {
-      if (points[i] == null) {
+    for (Point p: points) {
+      if (p==null) {
         throw new java.lang.IllegalArgumentException();
       }
+    }
+    Point[] pts = new Point[points.length];
+    System.arraycopy( points, 0, pts, 0, points.length );
+    Arrays.sort( pts );
+    for( int i = 0; i < pts.length; i++ ) {
+      if (i > 0 && (pts[i].compareTo(pts[i-1])==0)) {
+        throw new java.lang.IllegalArgumentException();
+      }      
+    }
+    for (int i = 0; i < points.length; i++) {
       for (int j = 0; j < points.length; j++) {
         if (j==i) {
           continue;

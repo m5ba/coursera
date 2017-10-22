@@ -5,18 +5,31 @@ public class FastCollinearPoints {
 
   private final ArrayList<LineSegment> segments = new ArrayList<LineSegment>();
 
-  // finds all line segments containing 4 points
   public FastCollinearPoints(Point[] points) {
-    if( points == null ) {
+    if( points == null || points.length==0 ) {
       throw new java.lang.IllegalArgumentException();
     }
+    for (Point p: points) {
+      if (p==null) {
+        throw new java.lang.IllegalArgumentException();
+      }
+    }
+    Point[] pts = new Point[points.length];
+    System.arraycopy( points, 0, pts, 0, points.length );
+    Arrays.sort( pts );
+    for( int i = 0; i < pts.length; i++ ) {
+      if (i > 0 && (pts[i].compareTo(pts[i-1])==0)) {
+        throw new java.lang.IllegalArgumentException();
+      }      
+    }
     for( int i = 0; i < points.length; i++ ) {
-      Point[] pts = new Point[points.length];
-      System.arraycopy( points, 0, pts, 0, points.length );
       Arrays.sort( pts, points[i].slopeOrder() );
       double slLast = Double.NaN;
       ArrayList<Point> collinear = new ArrayList<Point>();
       for( int j = 1; j < points.length; j++ ) {
+        if (points[j] == null) {
+          throw new java.lang.IllegalArgumentException();
+        }
         double sl = points[i].slopeTo( pts[j] );
         if ( !Double.isNaN(slLast) && Math.abs( sl - slLast ) > Double.MIN_NORMAL ) {
           addSegment( collinear, points[i] );
@@ -60,6 +73,4 @@ public class FastCollinearPoints {
   public LineSegment[] segments() {
     return segments.toArray(new LineSegment[segments.size()]);
   }
-
-
 }

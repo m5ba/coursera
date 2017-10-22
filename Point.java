@@ -126,7 +126,9 @@ public class Point implements Comparable<Point> {
         double cp0 = pt.slopeTo(p0);
         double cp1 = pt.slopeTo(p1);
 
-        if (Math.abs(cp0-cp1) < Double.MIN_NORMAL || (Double.isInfinite(cp0) && Double.isInfinite(cp1))) {
+        if (Math.abs(cp0-cp1) < Double.MIN_NORMAL 
+          || (cp0 == Double.NEGATIVE_INFINITY && cp1 == Double.NEGATIVE_INFINITY)
+          || (cp0 == Double.POSITIVE_INFINITY && cp1 == Double.POSITIVE_INFINITY)) {
           return 0;
         }
         else if (cp0 < cp1) {
