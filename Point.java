@@ -124,7 +124,7 @@ public class Point implements Comparable<Point> {
         /* YOUR CODE HERE */
     }
 
-    class PointsComparator implements Comparator<Point> {
+    private class PointsComparator implements Comparator<Point> {
       private final Point pt;
       public PointsComparator(Point p) {
         pt = p;
@@ -139,9 +139,10 @@ public class Point implements Comparable<Point> {
           return +1;
         }
       }
-
+      /*
       public boolean equals(Object obj) {
         return pt.equals(obj);
       }
+      */
     }
 }

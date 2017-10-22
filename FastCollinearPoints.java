@@ -18,7 +18,7 @@ public class FastCollinearPoints {
       ArrayList<Point> collinear = new ArrayList<Point>();
       for( int j = 1; j < points.length; j++ ) {
         double sl = points[i].slopeTo( pts[j] );
-        if ( slLast!=Double.NaN && Math.abs( sl - slLast ) > Double.MIN_NORMAL ) {
+        if ( !Double.isNaN(slLast) && Math.abs( sl - slLast ) > Double.MIN_NORMAL ) {
           addSegment( collinear, points[i] );
           collinear.clear();
         }

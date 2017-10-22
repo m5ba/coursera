@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BruteCollinearPoints {
 
@@ -7,56 +6,56 @@ public class BruteCollinearPoints {
 
   // finds all line segments containing 4 points
   public BruteCollinearPoints(Point[] points) {
-    if( points == null ) {
+    if (points == null) {
       throw new java.lang.IllegalArgumentException();
     }
 
-    for( int i = 0; i < points.length; i++ ) {
-      for( int j = 0; j < points.length; j++ ) {
-        if( j==i ) {
+    for (int i = 0; i < points.length; i++) {
+      for (int j = 0; j < points.length; j++) {
+        if (j==i) {
           continue;
         }
         double s0 = points[i].slopeTo(points[j]);
-        for( int k = 0; k < points.length; k++) {
-          if( k==i || k==j ) {
+        for (int k = 0; k < points.length; k++) {
+          if (k==i || k==j) {
             continue;
           }
           double s1 = points[i].slopeTo(points[k]);
-          if( Math.abs(s0-s1) > Double.MIN_NORMAL && !( s0 == Double.POSITIVE_INFINITY && s1 == Double.POSITIVE_INFINITY) ) {
+          if (Math.abs(s0-s1) > Double.MIN_NORMAL && !( s0 == Double.POSITIVE_INFINITY && s1 == Double.POSITIVE_INFINITY)) {
             continue;
           }
-          for( int g = 0; g < points.length; g++ ) {
-            if( g==i || g==j || g==k ) {
+          for (int g = 0; g < points.length; g++) {
+            if (g==i || g==j || g==k) {
               continue;
             }
             double s2 = points[i].slopeTo(points[g]);
-            if( Math.abs(s0-s2) < Double.MIN_NORMAL || ( s0 == Double.POSITIVE_INFINITY && s2 == Double.POSITIVE_INFINITY) ) {
+            if (Math.abs(s0-s2) < Double.MIN_NORMAL || ( s0 == Double.POSITIVE_INFINITY && s2 == Double.POSITIVE_INFINITY)) {
               Point[] p4 = new Point[4];
               p4[0] = points[i];
               p4[1] = points[j];
               p4[2] = points[g];
               p4[3] = points[k];
               int iMin = 0;
-              for( int h = 1; h < 4; h++ ) {
-                if( p4[iMin].compareTo(p4[h]) < 0 ) {
+              for (int h = 1; h < 4; h++) {
+                if (p4[iMin].compareTo(p4[h]) < 0) {
                   iMin = h;
                 }
               }
               int iMax = 0;
-              for( int h = 1; h < 4; h++ ) {
-                if( p4[iMax].compareTo(p4[h]) > 0 ) {
+              for (int h = 1; h < 4; h++) {
+                if (p4[iMax].compareTo(p4[h]) > 0) {
                   iMax = h;
                 }
               }
               LineSegment ls =  new LineSegment( p4[iMin], p4[iMax] );
               int n =0;
-              for( LineSegment s : segments ) {
-                if( s.toString().equals( ls.toString())) {
+              for (LineSegment s : segments) {
+                if (s.toString().equals( ls.toString())) {
                   n++;
                   break;
                 }
               }
-              if( n == 0 ) {
+              if (n == 0) {
                 segments.add(ls);
               }
             }
