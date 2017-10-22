@@ -60,13 +60,13 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-      if( x == that.x && y == that.y ) {
+      if (x == that.x && y == that.y) {
         return Double.NEGATIVE_INFINITY;
       }
-      else if ( x == that.x ) {
+      else if (x == that.x) {
         return Double.POSITIVE_INFINITY;
       }
-      else if ( y == that.y ) {
+      else if (y == that.y) {
         return 0.0;
       }
       return (double)( that.y - y) / (double)( that.x - x );   
@@ -85,7 +85,7 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-      if( y == that.y ) {
+      if (y == that.y) {
         return x - that.x;
       }
       return y - that.y;
@@ -98,7 +98,7 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-      if( comparator == null ) {
+      if (comparator == null) {
         comparator = new PointsComparator(this);
       }
         return comparator;
@@ -117,13 +117,6 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-    /**
-     * Unit tests the Point data type.
-     */
-    public static void main(String[] args) {
-        /* YOUR CODE HERE */
-    }
-
     private class PointsComparator implements Comparator<Point> {
       private final Point pt;
       public PointsComparator(Point p) {
@@ -132,17 +125,16 @@ public class Point implements Comparable<Point> {
       public int compare(Point p0, Point p1) {
         double cp0 = pt.slopeTo(p0);
         double cp1 = pt.slopeTo(p1);
-        if( cp0 < cp1 ) {
+
+        if (Math.abs(cp0-cp1) < Double.MIN_NORMAL || (Double.isInfinite(cp0) && Double.isInfinite(cp1))) {
+          return 0;
+        }
+        else if (cp0 < cp1) {
           return -1;
         }
         else {
-          return +1;
+          return 1;
         }
       }
-      /*
-      public boolean equals(Object obj) {
-        return pt.equals(obj);
-      }
-      */
     }
 }

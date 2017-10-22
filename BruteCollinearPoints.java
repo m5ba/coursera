@@ -11,9 +11,15 @@ public class BruteCollinearPoints {
     }
 
     for (int i = 0; i < points.length; i++) {
+      if (points[i] == null) {
+        throw new java.lang.IllegalArgumentException();
+      }
       for (int j = 0; j < points.length; j++) {
         if (j==i) {
           continue;
+        }
+        if (points[j] == null) {
+          throw new java.lang.IllegalArgumentException();
         }
         double s0 = points[i].slopeTo(points[j]);
         for (int k = 0; k < points.length; k++) {

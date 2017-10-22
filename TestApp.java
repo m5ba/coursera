@@ -4,6 +4,14 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class TestApp {
   public static void main(String[] args) {
+
+    Point p = new Point(3, 6);
+    Point q = new Point(3, 5);
+    Point r = new Point(3, 5);
+    StdOut.println(p.slopeOrder().compare(q, r));
+    StdOut.println(p.slopeTo(q));
+    StdOut.println(p.slopeTo(r));
+    /*
     
     int n = StdIn.readInt();
     Point[] points = new Point[n];
@@ -31,5 +39,6 @@ public class TestApp {
       segment.draw();
     }
     StdDraw.show();
+    */
   }
 }
