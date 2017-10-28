@@ -1,13 +1,12 @@
-import java.util.Iterator;
 import java.util.ArrayList;
 
 public class Board {
   private final int[][] data;
   private final int n;
-  private int nManhattan;
-  private int nHamming;
-  private int zeroR;
-  private int zeroC;
+  private final int nManhattan;
+  private final int nHamming;
+  private final int zeroR;
+  private final int zeroC;
   public Board(int[][] blocks) {
     if (blocks == null) {
       throw new java.lang.IllegalArgumentException();
@@ -20,23 +19,30 @@ public class Board {
     if (r != n) {
       throw new java.lang.IllegalArgumentException();
     }
-    data = blocks;
-    nHamming = 0;
+    data = new int[n][n];
+    int zR = -1;
+    int zC = -1;
+    int nH = 0;
+    int nM = 0;
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
+        data[i][j] = blocks[i][j];
         int er = data[i][j] /n;
         int ec = data[i][j] % n;
         if (i!=er || j!=ec) {
-          nHamming++;
+          nH++;
         }
-        nManhattan+=Math.abs(er-i)+Math.abs(ec-j);
+        nM+=Math.abs(er-i)+Math.abs(ec-j);
         if (data[i][j] == 0) {
-          zeroR = i;
-          zeroC = j;
+          zR = i;
+          zC = j;
         }
       }
     }
-    nManhattan = 0;
+    nManhattan = nM;
+    nHamming = nH;
+    zeroR = zR;
+    zeroC = zC;
   }
 
   private int getRow(int idx) {
@@ -83,13 +89,19 @@ public class Board {
   }
 
   public boolean equals(Object y) {
-    int[][] t = (int[][])y;
-    if (t.length != n && t[0].length != n) {
+    if (this == y) {
+      return true;
+    }
+    if (y == null || y instanceof Board) {
+      return false;
+    }
+    Board t = (Board)y;
+    if (t.dimension() != n || t.manhattan()!=manhattan()) {
       return false;
     }
     for (int i=0; i < n; i++) {
       for (int j = 0; j < n; j++) {
-        if (data[i][j] != t[i][j]) {
+        if (data[i][j] != t.data[i][j]) {
           return false;
         }
       }
