@@ -7,9 +7,10 @@ public class BoardTest {
     int[][] data = new int[n][n];
     for (int i = 0;i<n;i++) {
       for(int j=0;j<n;j++){
-        data[i][j] = n*i+j;
+        data[i][j] = n*i+j+1;
       }
     }
+    data[2][2]=0;
     Board b = new Board(data);
     StdOut.println(b);
     StdOut.println(b.manhattan());

@@ -7,6 +7,7 @@ public class Board {
   private final int nHamming;
   private final int zeroR;
   private final int zeroC;
+  private final int hash;
   public Board(int[][] blocks) {
     if (blocks == null) {
       throw new java.lang.IllegalArgumentException();
@@ -27,15 +28,18 @@ public class Board {
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         data[i][j] = blocks[i][j];
-        int er = data[i][j] /n;
-        int ec = data[i][j] % n;
-        if (i!=er || j!=ec) {
-          nH++;
-        }
-        nM+=Math.abs(er-i)+Math.abs(ec-j);
+        int er = (data[i][j]-1) /n;
+        int ec = (data[i][j]-1) % n;
         if (data[i][j] == 0) {
           zR = i;
           zC = j;
+        }
+        else {
+          nM+=Math.abs(er-i)+Math.abs(ec-j);
+          if (i!=er || j!=ec) {
+            nH++;
+          }
+            
         }
       }
     }
@@ -43,6 +47,12 @@ public class Board {
     nHamming = nH;
     zeroR = zR;
     zeroC = zC;
+    hash = calcHash();
+  }
+
+  private int calcHash() {
+    int hash = java.util.Arrays.deepHashCode( data );
+    return hash;
   }
 
   private int getRow(int idx) {
@@ -87,16 +97,20 @@ public class Board {
     }
     return createBoard(getRow(idx0), getCol(idx0), getRow(idx1), getCol(idx1));
   }
-
+  
+  @Override
   public boolean equals(Object y) {
     if (this == y) {
       return true;
     }
-    if (y == null || y instanceof Board) {
+    if (y == null) {
       return false;
     }
+    if (getClass() != y.getClass()) {
+      return false;    
+    }
     Board t = (Board)y;
-    if (t.dimension() != n || t.manhattan()!=manhattan()) {
+    if (hash!=t.hash || t.dimension() != n) {
       return false;
     }
     for (int i=0; i < n; i++) {
