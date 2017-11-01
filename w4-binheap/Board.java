@@ -35,8 +35,8 @@ public class Board {
           zC = j;
         }
         else {
-          nM+=Math.abs(er-i)+Math.abs(ec-j);
-          if (i!=er || j!=ec) {
+          nM += Math.abs(er - i) + Math.abs(ec - j);
+          if (i != er || j != ec) {
             nH++;
           }
             
@@ -51,8 +51,8 @@ public class Board {
   }
 
   private int calcHash() {
-    int hash = java.util.Arrays.deepHashCode( data );
-    return hash;
+    int res = java.util.Arrays.deepHashCode(data);
+    return res;
   }
 
   private int getRow(int idx) {
@@ -83,14 +83,14 @@ public class Board {
     int idx0 = -1;
     int idx = 0;
     while (idx0 == -1) {
-      if (data[getRow(idx)][getCol(idx)]>0) {
+      if (data[getRow(idx)][getCol(idx)] > 0) {
         idx0 = idx;
       }
       idx++;
     }
     int idx1 = -1;
     while (idx1 == -1) {
-      if (data[getRow(idx)][getCol(idx)]>0) {
+      if (data[getRow(idx)][getCol(idx)] > 0) {
         idx1 = idx;
       }
       idx++;
@@ -109,18 +109,13 @@ public class Board {
     if (getClass() != y.getClass()) {
       return false;    
     }
-    Board t = (Board)y;
-    if (hash!=t.hash || t.dimension() != n) {
-      return false;
-    }
-    for (int i=0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
-        if (data[i][j] != t.data[i][j]) {
-          return false;
-        }
-      }
-    }
-    return true;
+    Board t = (Board) y;
+    return  hash == t.hash && 
+            hamming() == t.hamming() &&
+            manhattan() == t.manhattan() &&
+            dimension() == t.dimension() &&
+            zeroC == t.zeroC &&
+            zeroR == t.zeroR;
   }
 
   private Board createBoard(int r0, int c0, int r1, int c1) {
@@ -156,7 +151,7 @@ public class Board {
     StringBuilder sb = new StringBuilder();
     sb.append(n);
     sb.append("\n");
-    for (int i=0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         sb.append(String.format(" %d", data[i][j]));
       }

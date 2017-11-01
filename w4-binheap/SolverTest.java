@@ -22,8 +22,6 @@ public class SolverTest {
     }
     Board b = new Board(data);
 
-    
-
     StdOut.println(b);
     long t0 = System.currentTimeMillis();
     Solver slvr = new Solver(b);
