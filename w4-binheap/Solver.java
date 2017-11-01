@@ -24,7 +24,6 @@ public class Solver {
     minPQ.insert(twin);
     Board2 current = minPQ.delMin();
     
-    current = minPQ.delMin();
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
       current.createNeighbors(boardsPool, minPQ);
@@ -38,6 +37,7 @@ public class Solver {
       }
       
     }
+    System.out.println("11");
     if (current != null) {
       int m = current.moves();
       Board[] res = new Board[m+1];
@@ -45,7 +45,7 @@ public class Solver {
         res[i] = current.node().board();
         current = current.parent();
       }
-      if (!res[0].equals(root)) {
+      if (res[0].equals(twin.node().board())) {
         moves = -1;
         solution = null;
       }
