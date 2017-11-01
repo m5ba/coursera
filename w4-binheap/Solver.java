@@ -19,7 +19,7 @@ public class Solver {
     Board2 current = new Board2(boardsPool.create(initial, 0), 0, null);    
     MinPQ<Board2> minPQ = new MinPQ<Board2>();
 
-    
+    /*
     BoardsPool boardsPoolTwined  = null;//new BoardsPool();
     Board2 currentTwined = null;//new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
     MinPQ<Board2> minPQTwined = null;//new MinPQ<Board2>();
@@ -27,11 +27,12 @@ public class Solver {
     int c=0;
     int minManhattan = Integer.MAX_VALUE;;
     boolean doTwin = false;
-
+    */
 
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
       current.createNeighbors(boardsPool, minPQ);
+      /*
       if (doTwin) {
         currentTwined.node().setProcessed();
         currentTwined.createNeighbors(boardsPoolTwined, minPQTwined);
@@ -47,6 +48,7 @@ public class Solver {
           return; 
         }
       }
+      */
       
       if (minPQ.size() > 0) {
         current = minPQ.delMin();
@@ -56,7 +58,8 @@ public class Solver {
       }
 
       
-      
+
+      /*
       if (!doTwin && current.node().manhattan()<minManhattan) {
         c=0;
         minManhattan = current.node().manhattan();
@@ -68,7 +71,7 @@ public class Solver {
         minPQTwined = new MinPQ<Board2>();
       }
       c++;
-      
+      */
     }
     if (current != null) {
       moves = current.moves();
@@ -166,14 +169,14 @@ public class Solver {
   private class BoardNode {
     private final Board board;
     private final int manhattan;
-    private final int hamming;
+    //private final int hamming;
     private boolean processed = false;
     private BoardNode next = null;
     private int minMoves;
     public BoardNode(Board b, int moves) {
       this.board = b;
       this.manhattan = b.manhattan();
-      this.hamming = b.hamming();
+      //this.hamming = b.hamming();
       this.minMoves = moves;
     }
 
@@ -193,10 +196,11 @@ public class Solver {
       return manhattan;
     }
 
+    /*
     public int hamming() {
       return hamming;
     }
-
+    */
     public boolean processed() {
       return processed;
     }
@@ -225,7 +229,7 @@ public class Solver {
         return false;    
       }
       BoardNode t = (BoardNode)y;
-      return (hamming() == t.hamming() && 
+      return (/*hamming() == t.hamming() && */
               manhattan() == t.manhattan() && 
               board.equals(t.board));
      }
@@ -273,7 +277,7 @@ public class Solver {
         if(current.manhattan() > m) {
           return null;
         }
-        if(current.manhattan() == m && current.hamming() == b.hamming() && current.board().equals(b)) {
+        if(current.manhattan() == m /*&& current.hamming() == b.hamming()*/ && current.board().equals(b)) {
           return current;
         }        
         current = current.next();
