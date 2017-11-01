@@ -111,8 +111,6 @@ public class Solver {
     private final BoardNode node;
     private final Board2 parent;
     private final int priority;
-    private Board2 linked = null;
-    private final ArrayList<Board2> neighbors  = new  ArrayList<Board2>();;
     
 
     public Board2(BoardNode node, int nMoves, Board2 parent) {
@@ -169,14 +167,12 @@ public class Solver {
   private class BoardNode {
     private final Board board;
     private final int manhattan;
-    //private final int hamming;
     private boolean processed = false;
     private BoardNode next = null;
     private int minMoves;
     public BoardNode(Board b, int moves) {
       this.board = b;
       this.manhattan = b.manhattan();
-      //this.hamming = b.hamming();
       this.minMoves = moves;
     }
 
@@ -196,11 +192,6 @@ public class Solver {
       return manhattan;
     }
 
-    /*
-    public int hamming() {
-      return hamming;
-    }
-    */
     public boolean processed() {
       return processed;
     }
@@ -229,8 +220,7 @@ public class Solver {
         return false;    
       }
       BoardNode t = (BoardNode)y;
-      return (/*hamming() == t.hamming() && */
-              manhattan() == t.manhattan() && 
+      return (manhattan() == t.manhattan() && 
               board.equals(t.board));
      }
   }
@@ -277,7 +267,7 @@ public class Solver {
         if(current.manhattan() > m) {
           return null;
         }
-        if(current.manhattan() == m /*&& current.hamming() == b.hamming()*/ && current.board().equals(b)) {
+        if(current.manhattan() == m && current.board().equals(b)) {
           return current;
         }        
         current = current.next();
