@@ -26,7 +26,7 @@ public class SolverTest {
 
     StdOut.println(b);
     long t0 = System.currentTimeMillis();
-    Solver slvr = new Solver(b.twin());
+    Solver slvr = new Solver(b);
     long t1 = System.currentTimeMillis();
     StdOut.println(String.format("solution took: %d", t1-t0));
     StdOut.println(slvr.isSolvable());
