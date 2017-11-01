@@ -19,36 +19,35 @@ public class Solver {
     Board2 current = new Board2(boardsPool.create(initial, 0), 0, null);    
     MinPQ<Board2> minPQ = new MinPQ<Board2>();
 
-    /*
-    BoardsPool boardsPoolTwined = null;// = new BoardsPool();
-    Board2 currentTwined = null;// = boardsPool.create(initial.twin(), 0, null);    
-    MinPQ<Board2> minPQTwined = null;// = new MinPQ<Board2>();
+    
+    BoardsPool boardsPoolTwined  = null;//new BoardsPool();
+    Board2 currentTwined = null;//new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
+    MinPQ<Board2> minPQTwined = null;//new MinPQ<Board2>();
     
     int c=0;
     int minManhattan = Integer.MAX_VALUE;;
     boolean doTwin = false;
-*/
+
 
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
       current.createNeighbors(boardsPool, minPQ);
-      //Process1Step(current, boardsPool, minPQ);
-      /*
       if (doTwin) {
-        Process1Step(currentTwined, boardsPoolTwined, minPQTwined);
-        if (minPQTwined.size() > 0) {
+        currentTwined.node().setProcessed();
+        currentTwined.createNeighbors(boardsPoolTwined, minPQTwined);
+          if (minPQTwined.size() > 0) {
           currentTwined = minPQTwined.delMin();
         }
         else {
           currentTwined = null;
         }
-        if (currentTwined.manhattan() == 0) {
+        if (currentTwined.node().manhattan() == 0) {
           moves = -1;
           solution = null;
           return; 
         }
       }
-      */
+      
       if (minPQ.size() > 0) {
         current = minPQ.delMin();
       }
@@ -57,19 +56,19 @@ public class Solver {
       }
 
       
-      /*
-      if (current.manhattan()<minManhattan) {
+      
+      if (!doTwin && current.node().manhattan()<minManhattan) {
         c=0;
-        minManhattan = current.manhattan();
+        minManhattan = current.node().manhattan();
       }
-      if (c>10 && !doTwin) {
+      if (c>100 && !doTwin) {
         doTwin = true;
-        boardsPoolTwined = new BoardsPool();
-        currentTwined = boardsPool.create(initial.twin(), 0, null);    
+        boardsPoolTwined  = new BoardsPool();
+        currentTwined = new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
         minPQTwined = new MinPQ<Board2>();
       }
       c++;
-      */
+      
     }
     if (current != null) {
       moves = current.moves();
