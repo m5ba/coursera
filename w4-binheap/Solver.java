@@ -49,13 +49,23 @@ public class Solver {
         }
       }
       */
+
+      current = null;
+      while (minPQ.size() > 0 && current==null) {
+        current = minPQ.delMin();
+        if(boardsPool.find(current.node().board()).processed) {
+          current = null;
+        }
+      }
       
+      /*
       if (minPQ.size() > 0) {
         current = minPQ.delMin();
       }
       else {
         current = null;
       }
+      */
 
       
 
