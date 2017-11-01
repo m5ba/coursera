@@ -2,10 +2,12 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import java.util.Iterator;
 import java.util.ArrayList;
-
+import java.util.List;
+import java.util.Stack;
 
 public class SolverTest {
   public static void main(String[] args) {
+
     //Solver s = new Solver();
     //s.test();
     /*

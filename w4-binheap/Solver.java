@@ -1,12 +1,13 @@
 import java.lang.Comparable;
 import edu.princeton.cs.algs4.MinPQ;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Integer;
 
 public class Solver {
-  private final Board2 solution;
+  private final List<Board> solution;
   private final int moves;
 
   public Solver(Board initial) {
@@ -16,80 +17,46 @@ public class Solver {
     }
 
     BoardsPool boardsPool = new BoardsPool();
-    Board2 current = new Board2(boardsPool.create(initial, 0), 0, null);    
     MinPQ<Board2> minPQ = new MinPQ<Board2>();
-
-    /*
-    BoardsPool boardsPoolTwined  = null;//new BoardsPool();
-    Board2 currentTwined = null;//new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
-    MinPQ<Board2> minPQTwined = null;//new MinPQ<Board2>();
+    Board2 root = new Board2(boardsPool.create(initial, 0), 0, null);    
+    Board2 twin = new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
+    minPQ.insert(root);
+    minPQ.insert(twin);
+    Board2 current = minPQ.delMin();
     
-    int c=0;
-    int minManhattan = Integer.MAX_VALUE;;
-    boolean doTwin = false;
-    */
-
+    current = minPQ.delMin();
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
       current.createNeighbors(boardsPool, minPQ);
-      /*
-      if (doTwin) {
-        currentTwined.node().setProcessed();
-        currentTwined.createNeighbors(boardsPoolTwined, minPQTwined);
-          if (minPQTwined.size() > 0) {
-          currentTwined = minPQTwined.delMin();
-        }
-        else {
-          currentTwined = null;
-        }
-        if (currentTwined.node().manhattan() == 0) {
-          moves = -1;
-          solution = null;
-          return; 
-        }
-      }
-      */
-
+     
       current = null;
       while (minPQ.size() > 0 && current==null) {
         current = minPQ.delMin();
-        if(boardsPool.find(current.node().board()).processed) {
+        if(current.node().processed()) {
           current = null;
         }
       }
       
-      /*
-      if (minPQ.size() > 0) {
-        current = minPQ.delMin();
-      }
-      else {
-        current = null;
-      }
-      */
-
-      
-
-      /*
-      if (!doTwin && current.node().manhattan()<minManhattan) {
-        c=0;
-        minManhattan = current.node().manhattan();
-      }
-      if (c>100 && !doTwin) {
-        doTwin = true;
-        boardsPoolTwined  = new BoardsPool();
-        currentTwined = new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
-        minPQTwined = new MinPQ<Board2>();
-      }
-      c++;
-      */
     }
     if (current != null) {
-      moves = current.moves();
-      solution = current;
+      int m = current.moves();
+      Board[] res = new Board[m+1];
+      for (int i = current.moves(); i >= 0; i--) {
+        res[i] = current.node().board();
+        current = current.parent();
+      }
+      if (!res[0].equals(root)) {
+        moves = -1;
+        solution = null;
+      }
+      else {
+        moves = m;
+        solution = Arrays.asList(res);
+      }
     } 
     else {
-       moves = -1;
-       solution = null;
+      moves = -1;
+      solution = null;
     }
   }
 
@@ -102,6 +69,8 @@ public class Solver {
   }
 
   public Iterable<Board> solution() {
+    return solution;
+    /*
     if(solution == null) {
       return null;
     }
@@ -112,6 +81,7 @@ public class Solver {
       b = b.parent();
     }
     return Arrays.asList(res);
+    */
   }
 
 
@@ -202,6 +172,7 @@ public class Solver {
       return manhattan;
     }
 
+    
     public boolean processed() {
       return processed;
     }
@@ -209,6 +180,7 @@ public class Solver {
     public void setProcessed() {
       processed = true;
     }
+    
 
     public BoardNode next() {
       return next;
