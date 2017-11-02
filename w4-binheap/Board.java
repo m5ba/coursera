@@ -73,7 +73,7 @@ public class Board {
 
   public Board twin() {
     int r = (getRow(zeroIdx) > 0 ? 0 : 1);
-    return createBoard(getRow(r), getCol(0), getRow(r), getCol(1));
+    return createBoard(r, 0, r, 1);
   }
   
   @Override
