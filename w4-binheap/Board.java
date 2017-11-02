@@ -7,6 +7,7 @@ public class Board {
   private final int nHamming;
   private final int zeroIdx;
   private final int hash;
+
   public Board(int[][] blocks) {
     if (blocks == null) {
       throw new java.lang.IllegalArgumentException();
@@ -46,6 +47,32 @@ public class Board {
     zeroIdx = zIdx;
     hash = java.util.Arrays.hashCode(data);
   }
+
+  private Board(int[] blocks, int dim) {
+    this.data = blocks;
+    this.n = dim;
+    int zIdx = -1;
+    int nH = 0;
+    int nM = 0;
+    for (int i = 0; i < n*n; i++) {
+      if (data[i] == 0) {
+        zIdx = i;
+      }
+      else {
+        int er0 = (data[i]-1) /n;
+        int ec0 = (data[i]-1) % n;
+        int er1 = i /n;
+        int ec1 = i % n;
+        nM += Math.abs(er0 - er1) + Math.abs(ec0 - ec1);
+        if (er0 != er1 || ec1 != ec0) {
+          nH++;
+        }
+      }
+    }
+    nManhattan = nM;
+    nHamming = nH;
+    zeroIdx = zIdx;
+    hash = java.util.Arrays.hashCode(data);  }
 
   private int getRow(int idx) {
     return idx/n;
@@ -96,15 +123,13 @@ public class Board {
   }
 
   private Board createBoard(int r0, int c0, int r1, int c1) {
-    int[][] d = new int[n][n];
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
-        d[i][j] = data[i * n + j];
-      }
+    int[] d = new int[n*n];
+    for (int i = 0; i < n*n; i++) {
+      d[i] = data[i];
     }
-    d[r0][c0] = data[r1 * n + c1];
-    d[r1][c1] = data[r0 * n + c0];
-    return new Board(d);
+    d[r0 * n + c0] = data[r1 * n + c1];
+    d[r1 * n + c1] = data[r0 * n + c0];
+    return new Board(d, n);
   }
 
   public Iterable<Board> neighbors() {

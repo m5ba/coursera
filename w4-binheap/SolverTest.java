@@ -8,13 +8,6 @@ import java.util.Stack;
 public class SolverTest {
   public static void main(String[] args) {
 
-    //Solver s = new Solver();
-    //s.test();
-    /*
-    ArrayList<Integer> aa = new ArrayList<Integer>(2);
-    aa.add(1,5);
-    aa.add(2,5);
-    */
     final int n = 3;
     int[][] data = new int[n][n];
     for (int i = 0;i<n;i++) {
@@ -23,6 +16,7 @@ public class SolverTest {
       }
     }
     Board b = new Board(data);
+    //b = b.twin();
 
     StdOut.println(b);
     long t0 = System.currentTimeMillis();

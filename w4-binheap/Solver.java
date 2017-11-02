@@ -16,17 +16,18 @@ public class Solver {
       throw new java.lang.IllegalArgumentException();
     }
 
-    BoardsPool boardsPool = new BoardsPool();
+    BoardsPool boardsPoolRegular = new BoardsPool();
+    BoardsPool boardsPoolTwined = new BoardsPool();
     MinPQ<Board2> minPQ = new MinPQ<Board2>();
-    Board2 root = new Board2(boardsPool.create(initial, 0), 0, null);    
-    Board2 twin = new Board2(boardsPool.create(initial, 0), 0, null);    
+    Board2 root = new Board2(boardsPoolRegular.create(initial, 0), 0, null, false);    
+    Board2 twin = new Board2(boardsPoolTwined.create(initial.twin(), 0), 0, null, true);    
     minPQ.insert(root);
     minPQ.insert(twin);
     Board2 current = minPQ.delMin();
     
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
-      current.createNeighbors(boardsPool, minPQ);
+      current.createNeighbors((current.twined() ? boardsPoolTwined : boardsPoolRegular), minPQ);
 
       
       current = null;
@@ -35,29 +36,24 @@ public class Solver {
         if(current.node().processed()) {
           current = null;
         }
-      }
-      
+      }      
     }
-    if (current != null) {
-      int m = current.moves();
-      Board[] res = new Board[m+1];
-      for (int i = current.moves(); i >= 0; i--) {
-        res[i] = current.node().board();
-        current = current.parent();
-      }
-      if (res[0].equals(twin)) {
-        moves = -1;
-        solution = null;
-      }
-      else {
-        moves = m;
-        solution = Arrays.asList(res);
-      }
-    } 
-    else {
+
+    if (current == null || current.twined()) {
       moves = -1;
       solution = null;
+      return;
     }
+
+    int m = current.moves();
+    Board[] res = new Board[m+1];
+
+    for (int i = current.moves(); i >= 0; i--) {
+      res[i] = current.node().board();
+      current = current.parent();
+    }
+    moves = m;
+    solution = Arrays.asList(res);    
   }
 
   public boolean isSolvable() {
@@ -79,13 +75,15 @@ public class Solver {
     private final BoardNode node;
     private final Board2 parent;
     private final int priority;
-    
+    private final boolean twined;
 
-    public Board2(BoardNode node, int nMoves, Board2 parent) {
+
+    public Board2(BoardNode node, int nMoves, Board2 parent, boolean twined) {
       this.node = node;
       this.nMoves = nMoves;
       this.parent = parent;
       this.priority = nMoves + node.manhattan();
+      this.twined = twined;
     }
 
     public void createNeighbors(BoardsPool boardsPool, MinPQ<Board2> minPq) {
@@ -94,15 +92,19 @@ public class Solver {
         BoardNode nd = boardsPool.find(b0);
         if (nd == null) {
           nd = boardsPool.create(b0, nMoves+1);
-          Board2 selector = new Board2(nd, nMoves+1, this);
+          Board2 selector = new Board2(nd, nMoves+1, this, twined);
           minPq.insert(selector);
         }
         else if (nd.minMoves > (nMoves+1) && !nd.processed()) {
-          Board2 selector = new Board2(nd, nMoves+1, this);
+          Board2 selector = new Board2(nd, nMoves+1, this, twined);
           minPq.insert(selector);
           nd.setMinMoves(nMoves+1);          
         }
       }
+    }
+
+    public boolean twined() {
+      return this.twined;
     }
 
     public Board2 parent() {

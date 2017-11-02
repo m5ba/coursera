@@ -13,10 +13,13 @@ public class BoardTest {
     data[2][2]=0;
     Board b = new Board(data);
     StdOut.println(b);
-    StdOut.println(b.manhattan());
-    StdOut.println(b.hamming());
+    StdOut.println(String.format("dim=%d; manhattan=%d; namming=%d;", b.dimension(), b.manhattan(), b.hamming()));
+    b = b.twin();
+    StdOut.println(b);
+    StdOut.println(String.format("dim=%d; manhattan=%d; namming=%d;", b.dimension(), b.manhattan(), b.hamming()));
     for (Board bb : b.neighbors()) {
       StdOut.println(bb);
+      StdOut.println(String.format("dim=%d; manhattan=%d; namming=%d;", b.dimension(), b.manhattan(), b.hamming()));
     }
 
     System.out.println(b.twin());
