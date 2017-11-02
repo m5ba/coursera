@@ -19,7 +19,7 @@ public class Solver {
     BoardsPool boardsPool = new BoardsPool();
     MinPQ<Board2> minPQ = new MinPQ<Board2>();
     Board2 root = new Board2(boardsPool.create(initial, 0), 0, null);    
-    Board2 twin = new Board2(boardsPool.create(initial.twin(), 0), 0, null);    
+    Board2 twin = new Board2(boardsPool.create(initial, 0), 0, null);    
     minPQ.insert(root);
     minPQ.insert(twin);
     Board2 current = minPQ.delMin();
@@ -27,7 +27,8 @@ public class Solver {
     while (current != null && current.node().manhattan() > 0) {
       current.node().setProcessed();
       current.createNeighbors(boardsPool, minPQ);
-     
+
+      
       current = null;
       while (minPQ.size() > 0 && current==null) {
         current = minPQ.delMin();
@@ -44,7 +45,7 @@ public class Solver {
         res[i] = current.node().board();
         current = current.parent();
       }
-      if (res[0].equals(twin.node().board())) {
+      if (res[0].equals(twin)) {
         moves = -1;
         solution = null;
       }
@@ -78,7 +79,7 @@ public class Solver {
     private final BoardNode node;
     private final Board2 parent;
     private final int priority;
-    //private final ArrayList<Board2> neighbors = new ArrayList<Board2>();
+    
 
     public Board2(BoardNode node, int nMoves, Board2 parent) {
       this.node = node;
@@ -86,38 +87,6 @@ public class Solver {
       this.parent = parent;
       this.priority = nMoves + node.manhattan();
     }
-
-/*
-    public void createNeighbors(BoardsPool boardsPool, MinPQ<Board2> minPq) {
-      for (Iterator<Board> bIter = node.board().neighbors().iterator(); bIter.hasNext();) {
-        Board b0 = bIter.next();
-        boolean found = false;
-        BoardNode nd = null;
-        for (Iterator<Board> it1 = b0.neighbors().iterator(); it1.hasNext() && !found;) {
-          Board b1 = it1.next();
-          if (b1.equals(node.board())) {
-            continue;
-          }
-          for (Iterator<Board> it2 = b1.neighbors().iterator(); it2.hasNext()  && !found;) {
-            Board b2 = it2.next();
-            if (b0.equals(b2)) {
-              nd = boardsPool.find(b2);
-              if( nd!=null && nd.processed()) {
-                found = true;
-                break;
-              }
-            }
-          }
-        }
-        if (nd == null) {
-          nd = boardsPool.create(b0, nMoves+1);
-        }
-        if (!found) {
-          Board2 selector = new Board2(nd, nMoves+1, this);
-          minPq.insert(selector);
-        }
-      }
-    }*/
 
     public void createNeighbors(BoardsPool boardsPool, MinPQ<Board2> minPq) {
       for (Iterator<Board> bIter = node.board().neighbors().iterator(); bIter.hasNext();) {
@@ -135,6 +104,7 @@ public class Solver {
         }
       }
     }
+
     public Board2 parent() {
       return parent;
     }
@@ -165,15 +135,12 @@ public class Solver {
   private class BoardNode {
     private final Board board;
     private final int manhattan;
-    private final int hamming;
     private boolean processed = false;
     private BoardNode next = null;
     private int minMoves;
-
     public BoardNode(Board b, int moves) {
       this.board = b;
       this.manhattan = b.manhattan();
-      this.hamming = b.hamming();
       this.minMoves = moves;
     }
 
@@ -193,9 +160,6 @@ public class Solver {
       return manhattan;
     }
 
-    public int hamming() {
-      return hamming;
-    }
     
     public boolean processed() {
       return processed;
@@ -236,6 +200,7 @@ public class Solver {
 
     private BoardNode first = null;
 
+
     public BoardNode create(Board b, int moves) {
       BoardNode  res = new BoardNode(b, moves);
       if (first == null) {
@@ -272,7 +237,7 @@ public class Solver {
         if(current.manhattan() > m) {
           return null;
         }
-        if(current.manhattan() == m && current.hamming() == b.hamming() && current.board().equals(b)) {
+        if(current.manhattan() == m && current.board().equals(b)) {
           return current;
         }        
         current = current.next();
